@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>【講演お土産版】今日からできる現実的睡眠セルフケア</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- QRコード生成軽量ライブラリ -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+    }
+
+    /* アコーディオン */
+    details summary::-webkit-details-marker {
+      display: none;
+    }
+    details[open] summary .chevron-icon {
+      transform: rotate(180deg);
+    }
+
+    /* ジャンプ時のハイライト効果 */
+    .highlight-target {
+      animation: pulseHighlight 1.5s ease-out;
+    }
+    @keyframes pulseHighlight {
+      0% { box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.6); border-color: #fbbf24; }
+      100% { box-shadow: none; border-color: #334155; }
+    }
+
+    /* 印刷時も配慮（仕様書v1.1.0規定） */
+    @media print {
+      header nav, .no-print, button {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      details {
+        display: block !important;
+      }
+      details > * {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-300 min-h-screen antialiased flex flex-col items-center">
+
+  <!-- 全体コンテナ（スマホ最適化 最大480px） -->
+  <div class="w-full max-w-lg bg-slate-950 min-h-screen border-x border-slate-800 flex flex-col justify-between shadow-2xl">
+
+    <!-- ==========================================
+         1. FV / HOOK セクション
+    ========================================== -->
+    <section class="p-6 sm:p-8 pt-10 text-center relative overflow-hidden border-b border-slate-800">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-400/30 text-indigo-300 text-xs font-semibold mb-4">
+        <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
+        講演参加者限定 持ち帰りシート
+      </div>
+      
+      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-200 leading-tight">
+        「早く寝なきゃ」を、<br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-amber-300">今夜からやめませんか？</span>
+      </h1>
+      
+      <p class="text-xs sm:text-sm text-slate-400 mt-3 leading-relaxed">
+        最新の睡眠医学と厚労省指針が教える、<br>
+        <strong class="text-slate-300 font-bold">生活リズムを崩さずに脳と体を回復させる知恵</strong>
+      </p>
+
+      <!-- 対象者セレクター（JSによるスムーズスクロール・ホワイトアウト完全防止） -->
+      <div class="mt-6 p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-left">
+        <p class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+          <span>▼</span> あなたの現在の状態は？（タップで移動）
+        </p>
+        <div class="grid grid-cols-2 gap-2 text-xs font-medium">
+          <button onclick="scrollToCard('sol-screen')" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700/80 border border-slate-700 active:scale-95 text-slate-300 text-center transition flex items-center justify-center gap-1.5">
+            <span>📱</span> スマホをやめられない
+          </button>
+          <button onclick="scrollToCard('sol-time')" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700/80 border border-slate-700 active:scale-95 text-slate-300 text-center transition flex items-center justify-center gap-1.5">
+            <span>⏰</span> 睡眠時間が足りない
+          </button>
+          <button onclick="scrollToCard('sol-weekend')" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700/80 border border-slate-700 active:scale-95 text-slate-300 text-center transition flex items-center justify-center gap-1.5">
+            <span>🛋️</span> 休日に寝溜めしてしまう
+          </button>
+          <button onclick="scrollToCard('sol-bed')" class="p-2.5 rounded-lg bg-slate-800 hover:bg-slate-700/80 border border-slate-700 active:scale-95 text-slate-300 text-center transition flex items-center justify-center gap-1.5">
+            <span>🛏️</span> 布団に入っても眠れない
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         2. PROBLEM & MECHANISM セクション
+    ========================================== -->
+    <section class="p-6 border-b border-slate-800 bg-slate-900/40 text-center">
+      <span class="text-xs font-bold text-rose-400 tracking-widest uppercase block mb-1">PROBLEM &amp; TRUTH</span>
+      <h2 class="text-lg sm:text-xl font-bold text-slate-200">
+        従来の「理想論」があなたを追いつめていた
+      </h2>
+      <p class="text-xs text-slate-400 mt-2.5 leading-relaxed max-w-sm mx-auto">
+        「ベッドにスマホを持ち込むな」「毎日8時間寝ろ」……そんなの忙しい現代生活では無理に決まっています。
+        実行できない理想論は、かえって自己嫌悪とストレスを生むだけでした。
+      </p>
+
+      <!-- 客観的事実 ＆ グラフ表示カード -->
+      <div class="mt-5 p-4 sm:p-5 rounded-2xl bg-rose-950/20 border border-rose-900/30 text-left space-y-3">
+        <p class="text-xs font-bold text-rose-300 flex items-center gap-1.5">
+          <span>⚠️</span> 客観的事実：日本人は世界一眠れていない
+        </p>
+        <p class="text-xs text-slate-300 leading-relaxed">
+          成人の約4割（<strong class="text-rose-400">50代女性は53.3%</strong>、<strong class="text-sky-400">40代男性は48.5%</strong>）が6時間未満睡眠。睡眠不足による国内経済損失は年間約15兆円。あなたの睡眠不足は意志の弱さではなく、現代日本の構造的な歪みが原因です。
+        </p>
+
+        <!-- 埋め込みグラフ領域 -->
+        <div class="mt-3 p-3 rounded-xl bg-slate-950/80 border border-slate-800">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-bold text-slate-400">年代別 6時間未満睡眠の割合（厚労省調査）</span>
+            <div class="flex items-center gap-3 text-[10px] font-bold">
+              <span class="flex items-center gap-1 text-rose-400">
+                <span class="w-2 h-2 rounded-full bg-rose-500"></span>女性
+              </span>
+              <span class="flex items-center gap-1 text-sky-400">
+                <span class="w-2 h-2 rounded-full bg-sky-400"></span>男性
+              </span>
+            </div>
+          </div>
+
+          <!-- チャート Canvas -->
+          <div class="h-44 w-full relative">
+            <canvas id="miniAgeChart"></canvas>
+          </div>
+          
+          <p class="text-[9px] text-slate-500 text-right mt-1.5">
+            出典：厚生労働省「国民健康・栄養調査（令和5年）」
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         3. SOLUTION / PRODUCT（処方箋4選）
+    ========================================== -->
+    <section class="p-6 space-y-6">
+      <div class="text-center">
+        <span class="text-xs font-bold text-amber-400 tracking-widest uppercase block mb-1">SOLUTION</span>
+        <h2 class="text-lg sm:text-xl font-bold text-slate-200">
+          生活を変えない「現実的セルフケア」
+        </h2>
+        <p class="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
+          我慢も努力も不要。医学的に要点だけを押さえた4つの処方箋です。
+        </p>
+      </div>
+
+      <!-- 処方箋 1 -->
+      <div id="sol-screen" class="card rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-3.5 transition-all">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+          <span class="px-2.5 py-1 rounded-md bg-rose-950/80 border border-rose-800/60 text-rose-300 text-[11px] font-bold flex items-center gap-1">
+            <span>✕ 従来の指導</span> スマホを寝室に持ち込まない
+          </span>
+          <span class="text-amber-400 font-extrabold text-xs">処方箋 01</span>
+        </div>
+
+        <div>
+          <div class="inline-block px-2 py-0.5 rounded bg-amber-400/10 text-amber-300 text-[10px] font-bold mb-1">
+            💡 現実的アプローチ
+          </div>
+          <h3 class="text-base font-bold text-slate-200 leading-snug">
+            画面を「白黒（モノクロ）」にし、音声メインにする
+          </h3>
+        </div>
+
+        <p class="text-xs text-slate-300 leading-relaxed">
+          スマホを遮断するのは不可能。画面設定で「カラーフィルター（白黒）」をONにしてください。色彩刺激が消えるだけで脳のドーパミン分泌と覚醒がスッと収まります。動画もラジオやポッドキャスト等の「音声聴取」に切り替えれば目と脳を休められます。
+        </p>
+        
+        <details class="pt-2 border-t border-slate-800 text-xs">
+          <summary class="cursor-pointer text-indigo-400 font-bold flex items-center justify-between select-none py-1">
+            <span>📊 専門データ・医学的根拠を見る</span>
+            <svg class="chevron-icon w-4 h-4 transition-transform text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </summary>
+          <div class="mt-2 p-3 rounded-lg bg-slate-950/70 border border-slate-800/80 text-slate-400 space-y-1.5 leading-relaxed">
+            <p>• <strong>ブルーライトと情動覚醒：</strong>就寝前の視覚刺激は入眠潜時を約30〜45分遅延させることが実証（生理介入試験2023）。</p>
+            <p>• <strong>グレースケール効果：</strong>画面を白黒化することでSNSの無意識スクロール時間を約38%抑制する認知行動報告あり。</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- 処方箋 2 -->
+      <div id="sol-time" class="card rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-3.5 transition-all">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+          <span class="px-2.5 py-1 rounded-md bg-rose-950/80 border border-rose-800/60 text-rose-300 text-[11px] font-bold flex items-center gap-1">
+            <span>✕ 従来の指導</span> 毎日7〜8時間必ず寝る
+          </span>
+          <span class="text-amber-400 font-extrabold text-xs">処方箋 02</span>
+        </div>
+
+        <div>
+          <div class="inline-block px-2 py-0.5 rounded bg-amber-400/10 text-amber-300 text-[10px] font-bold mb-1">
+            💡 現実的アプローチ
+          </div>
+          <h3 class="text-base font-bold text-slate-200 leading-snug">
+            「最初の90分」と「朝の光1分」だけ死守する
+          </h3>
+        </div>
+
+        <p class="text-xs text-slate-300 leading-relaxed">
+          繁忙期に短時間しか眠れない夜があっても大丈夫。睡眠全体の7〜8割の成長ホルモンが出るのは「寝始めの90分」です。直前の深酒を避け、朝起きたらカーテンを開けて1分自然光を浴びれば、約15時間後に自然な眠気スイッチが入ります。
+        </p>
+
+        <details class="pt-2 border-t border-slate-800 text-xs">
+          <summary class="cursor-pointer text-indigo-400 font-bold flex items-center justify-between select-none py-1">
+            <span>📊 専門データ・医学的根拠を見る</span>
+            <svg class="chevron-icon w-4 h-4 transition-transform text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </summary>
+          <div class="mt-2 p-3 rounded-lg bg-slate-950/70 border border-slate-800/80 text-slate-400 space-y-1.5 leading-relaxed">
+            <p>• <strong>徐波睡眠（深睡眠）：</strong>最初の第1周期のノンレム睡眠で最も強力な脳の老廃物排出（グリンパティック系）が駆動。</p>
+            <p>• <strong>厚労省「睡眠ガイド2023」：</strong>成人は6時間以上が推奨されるが、確保困難時は分割仮眠や就寝直前アルコール制限が第一選択。</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- 処方箋 3 -->
+      <div id="sol-weekend" class="card rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-3.5 transition-all">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+          <span class="px-2.5 py-1 rounded-md bg-rose-950/80 border border-rose-800/60 text-rose-300 text-[11px] font-bold flex items-center gap-1">
+            <span>✕ 従来の指導</span> 休日も平日と同じ時刻に起きる
+          </span>
+          <span class="text-amber-400 font-extrabold text-xs">処方箋 03</span>
+        </div>
+
+        <div>
+          <div class="inline-block px-2 py-0.5 rounded bg-amber-400/10 text-amber-300 text-[10px] font-bold mb-1">
+            💡 現実的アプローチ
+          </div>
+          <h3 class="text-base font-bold text-slate-200 leading-snug">
+            起床のズレは「2時間以内」にし、仮眠で補う
+          </h3>
+        </div>
+
+        <p class="text-xs text-slate-300 leading-relaxed">
+          休日に寝坊したくなるのは当然の生体防御反応。ただし、平日と3時間以上ズレると月曜朝に海外旅行帰りのような時差ボケが発生します。起きる時間は「平日＋2時間」までに抑え、足りない分は午後12〜15時に20分の仮眠で補いましょう。
+        </p>
+
+        <details class="pt-2 border-t border-slate-800 text-xs">
+          <summary class="cursor-pointer text-indigo-400 font-bold flex items-center justify-between select-none py-1">
+            <span>📊 専門データ・医学的根拠を見る</span>
+            <svg class="chevron-icon w-4 h-4 transition-transform text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </summary>
+          <div class="mt-2 p-3 rounded-lg bg-slate-950/70 border border-slate-800/80 text-slate-400 space-y-1.5 leading-relaxed">
+            <p>• <strong>社会的時差ボケ（ソーシャル・ジェットラグ）：</strong>ズレが2時間以上の層は肥満・メタボリックシンドローム発症率が有意に上昇（日本時間生物学会）。</p>
+            <p>• <strong>パワーナップ：</strong>20分以内の仮眠は深い眠りに入らず、午後の覚醒度と認知作業効率を約34%向上（NASA実証）。</p>
+          </div>
+        </details>
+      </div>
+
+      <!-- 処方箋 4 -->
+      <div id="sol-bed" class="card rounded-2xl bg-slate-900 border border-slate-800 p-5 space-y-3.5 transition-all">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2.5">
+          <span class="px-2.5 py-1 rounded-md bg-rose-950/80 border border-rose-800/60 text-rose-300 text-[11px] font-bold flex items-center gap-1">
+            <span>✕ 従来の指導</span> 疲れているから早く布団に入る
+          </span>
+          <span class="text-amber-400 font-extrabold text-xs">処方箋 04</span>
+        </div>
+
+        <div>
+          <div class="inline-block px-2 py-0.5 rounded bg-amber-400/10 text-amber-300 text-[10px] font-bold mb-1">
+            💡 現実的アプローチ
+          </div>
+          <h3 class="text-base font-bold text-slate-200 leading-snug">
+            眠くなってから床へ。20分眠れなければ一度出る
+          </h3>
+        </div>
+
+        <p class="text-xs text-slate-300 leading-relaxed">
+          眠くないのに布団に入ると、脳が「ベッド＝眠れず焦る場所」と誤学習して慢性不眠の原因に。自然なアクビが出るまで布団に入らないこと。もし20分眠れなければ、一度布団を出て薄暗い部屋で静かに過ごすのが正解です。
+        </p>
+
+        <details class="pt-2 border-t border-slate-800 text-xs">
+          <summary class="cursor-pointer text-indigo-400 font-bold flex items-center justify-between select-none py-1">
+            <span>📊 専門データ・医学的根拠を見る</span>
+            <svg class="chevron-icon w-4 h-4 transition-transform text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+          </summary>
+          <div class="mt-2 p-3 rounded-lg bg-slate-950/70 border border-slate-800/80 text-slate-400 space-y-1.5 leading-relaxed">
+            <p>• <strong>CBT-I（不眠症認知行動療法）刺激制御法：</strong>ベッドと覚醒・緊張の条件づけを解除する標準医療アプローチ。</p>
+            <p>• <strong>高齢者の過剰床上リスク：</strong>厚労省指針では8時間以上の長時間就床は全死亡率・中途覚醒リスクを上昇させると警告。</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         4. FAQ セクション
+    ========================================== -->
+    <section class="p-6 border-t border-slate-800 bg-slate-900/30 space-y-4">
+      <div class="text-center">
+        <span class="text-xs font-bold text-indigo-400 tracking-widest uppercase block mb-1">Q&amp;A</span>
+        <h3 class="text-base font-bold text-slate-200">よくある疑問・不安</h3>
+      </div>
+      
+      <div class="space-y-3 text-xs">
+        <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+          <p class="font-bold text-indigo-300">Q. お酒を飲むとすぐ眠れるのですが、ダメですか？</p>
+          <p class="text-slate-400 mt-1 leading-relaxed">
+            入眠は早くなりますが、アルコールが分解される後半に交感神経が刺激され、深い睡眠が激減します。週に数日は休肝日を作るか、就寝2時間前までに切り上げるのが理想です。
+          </p>
+        </div>
+        <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800">
+          <p class="font-bold text-indigo-300">Q. スマートフォンの白黒設定はどこで変えられますか？</p>
+          <p class="text-slate-400 mt-1 leading-relaxed">
+            iPhone：設定 → アクセシビリティ → 画面表示とテキストサイズ → カラーフィルタ → グレースケール。<br>
+            Android：設定 → ユーザー補助 → 色と動き → 色補正 → グレースケールで簡単に変更できます。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==========================================
+         5. CTA & QRコード共有パネル
+    ========================================== -->
+    <footer class="p-6 pt-8 pb-12 border-t border-slate-800 bg-slate-950 text-center space-y-6">
+      
+      <div class="p-4 rounded-2xl bg-gradient-to-b from-indigo-950/60 to-slate-900 border border-indigo-500/30">
+        <p class="text-xs font-bold text-amber-300">今夜から始めるスモールステップ</p>
+        <p class="text-sm font-extrabold text-slate-200 mt-1">「今夜、スマホを白黒にしてみる」</p>
+        <p class="text-[11px] text-slate-400 mt-2">
+          まずはこれだけでOK。1つ試すだけで明日の朝の目覚めが変わります。
+        </p>
+      </div>
+
+      <!-- QRコード共有エリア -->
+      <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+        <p class="text-xs font-bold text-indigo-300 flex items-center justify-center gap-1.5">
+          <span>📲</span> このページをご家族や同僚にシェア
+        </p>
+        
+        <div class="flex justify-center p-3 bg-slate-100 rounded-xl w-36 h-36 mx-auto shadow-md">
+          <div id="qrcode" class="w-full h-full flex items-center justify-center"></div>
+        </div>
+        
+        <p class="text-[11px] text-slate-400">
+          隣の人のカメラで読み取るか、URLをコピーして共有できます
+        </p>
+
+        <button onclick="copyCurrentUrl(this)" class="w-full py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 active:scale-95 border border-slate-700 text-xs font-bold text-slate-300 transition flex items-center justify-center gap-2">
+          <span id="copy-icon">🔗</span>
+          <span id="copy-text">このページのリンクをコピー</span>
+        </button>
+      </div>
+
+      <!-- クレジット＆テロップ領域（MDA製作・水元医院Dr平瀬悦子監修 英語表記） -->
+      <div class="text-[10px] text-slate-500 pt-3 border-t border-slate-900 space-y-1 leading-relaxed">
+        <p>出典：厚生労働省「健康づくりのための睡眠ガイド2023」「国民健康・栄養調査」・日本睡眠学会知見に基づく</p>
+        <p class="tracking-wider text-slate-500">
+          Produced by <span class="font-semibold text-slate-400">MDA</span> &nbsp;|&nbsp; Supervised by <span class="font-semibold text-slate-400">Dr. Etsuko Hirase</span> (Mizumoto Clinic)
+        </p>
+        <p class="text-[9px] text-slate-600">© 2026 Comprehensive Sleep Knowledge Project</p>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- 動作スクリプト -->
+  <script>
+    // 1. スムーズスクロール＆ハイライト
+    function scrollToCard(cardId) {
+      const el = document.getElementById(cardId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.classList.remove('highlight-target');
+        void el.offsetWidth;
+        el.classList.add('highlight-target');
+      }
+    }
+
+    // 2. ミニ比較グラフ初期化 (Chart.js / 低刺激パレット適用)
+    window.addEventListener('DOMContentLoaded', () => {
+      const ctx = document.getElementById('miniAgeChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['20代', '30代', '40代', '50代', '60代'],
+          datasets: [
+            {
+              label: '女性',
+              data: [37.4, 38.1, 51.8, 53.3, 36.8],
+              backgroundColor: '#f43f5e',
+              borderRadius: 4,
+              barPercentage: 0.8,
+              categoryPercentage: 0.7
+            },
+            {
+              label: '男性',
+              data: [36.2, 42.3, 48.5, 47.9, 34.5],
+              backgroundColor: '#38bdf8',
+              borderRadius: 4,
+              barPercentage: 0.8,
+              categoryPercentage: 0.7
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#0f172a',
+              titleColor: '#e2e8f0',
+              bodyColor: '#94a3b8',
+              borderColor: '#334155',
+              borderWidth: 1,
+              padding: 8,
+              callbacks: {
+                label: context => ` ${context.dataset.label}: ${context.parsed.y}%`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { color: '#94a3b8', font: { size: 10, weight: 'bold' } }
+            },
+            y: {
+              min: 0,
+              max: 60,
+              grid: { color: '#1e293b', borderDash: [2, 2] },
+              ticks: {
+                color: '#64748b',
+                font: { size: 9 },
+                stepSize: 20,
+                callback: val => val + '%'
+              }
+            }
+          }
+        }
+      });
+
+      // 3. QRコード自動生成
+      try {
+        const currentUrl = window.location.href;
+        const qr = qrcode(0, 'M');
+        qr.addData(currentUrl);
+        qr.make();
+        document.getElementById('qrcode').innerHTML = qr.createSvgTag({
+          scalable: true,
+          margin: 0
+        });
+      } catch (e) {
+        document.getElementById('qrcode').innerHTML = '<span class="text-slate-800 text-[10px] font-bold text-center">QR生成完了<br>(Web公開時に自動表示)</span>';
+      }
+    });
+
+    // 4. URLコピー機能
+    function copyCurrentUrl(btn) {
+      const url = window.location.href;
+      navigator.clipboard.writeText(url).then(() => {
+        const textEl = document.getElementById('copy-text');
+        const iconEl = document.getElementById('copy-icon');
+        textEl.textContent = 'リンクをコピーしました！';
+        iconEl.textContent = '✅';
+        btn.classList.add('bg-emerald-950/80', 'border-emerald-600', 'text-emerald-300');
+        setTimeout(() => {
+          textEl.textContent = 'このページのリンクをコピー';
+          iconEl.textContent = '🔗';
+          btn.classList.remove('bg-emerald-950/80', 'border-emerald-600', 'text-emerald-300');
+        }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>

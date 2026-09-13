@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>【講演お土産版】今日からできる現実的睡眠セルフケア</title>
+  <title>今日からできる現実的睡眠セルフケア</title>
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- QRコード生成軽量ライブラリ -->
-  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <style>
     html {
       scroll-behavior: smooth;
@@ -36,7 +35,6 @@
       100% { box-shadow: none; border-color: #334155; }
     }
 
-    /* 印刷時も配慮（仕様書v1.1.0規定） */
     @media print {
       header nav, .no-print, button {
         display: none !important;
@@ -56,29 +54,24 @@
 </head>
 <body class="bg-slate-900 text-slate-300 min-h-screen antialiased flex flex-col items-center">
 
-  <!-- 全体コンテナ（スマホ最適化 最大480px） -->
   <div class="w-full max-w-lg bg-slate-950 min-h-screen border-x border-slate-800 flex flex-col justify-between shadow-2xl">
 
     <!-- ==========================================
          1. FV / HOOK セクション
     ========================================== -->
     <section class="p-6 sm:p-8 pt-10 text-center relative overflow-hidden border-b border-slate-800">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-400/30 text-indigo-300 text-xs font-semibold mb-4">
-        <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span>
-        講演参加者限定 持ち帰りシート
-      </div>
       
-      <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-200 leading-tight">
+      <h1 class="text-[1.65rem] sm:text-3xl font-extrabold tracking-wide text-slate-200 leading-snug">
         「早く寝なきゃ」を、<br>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-amber-300">今夜からやめませんか？</span>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-amber-200 to-amber-300 inline-block mt-1">今夜からやめませんか？</span>
       </h1>
       
-      <p class="text-xs sm:text-sm text-slate-400 mt-3 leading-relaxed">
+      <p class="text-xs sm:text-sm text-slate-400 mt-4 leading-relaxed tracking-normal">
         最新の睡眠医学と厚労省指針が教える、<br>
         <strong class="text-slate-300 font-bold">生活リズムを崩さずに脳と体を回復させる知恵</strong>
       </p>
 
-      <!-- 対象者セレクター（JSによるスムーズスクロール・ホワイトアウト完全防止） -->
+      <!-- 対象者セレクター -->
       <div class="mt-6 p-3.5 rounded-xl bg-slate-900/90 border border-slate-800 text-left">
         <p class="text-xs font-bold text-amber-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
           <span>▼</span> あなたの現在の状態は？（タップで移動）
@@ -122,7 +115,6 @@
           成人の約4割（<strong class="text-rose-400">50代女性は53.3%</strong>、<strong class="text-sky-400">40代男性は48.5%</strong>）が6時間未満睡眠。睡眠不足による国内経済損失は年間約15兆円。あなたの睡眠不足は意志の弱さではなく、現代日本の構造的な歪みが原因です。
         </p>
 
-        <!-- 埋め込みグラフ領域 -->
         <div class="mt-3 p-3 rounded-xl bg-slate-950/80 border border-slate-800">
           <div class="flex items-center justify-between mb-2">
             <span class="text-[11px] font-bold text-slate-400">年代別 6時間未満睡眠の割合（厚労省調査）</span>
@@ -136,7 +128,6 @@
             </div>
           </div>
 
-          <!-- チャート Canvas -->
           <div class="h-44 w-full relative">
             <canvas id="miniAgeChart"></canvas>
           </div>
@@ -338,14 +329,17 @@
         </p>
       </div>
 
-      <!-- QRコード共有エリア -->
+      <!-- QRコード共有エリア（API直接描画で100%確実に表示） -->
       <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
         <p class="text-xs font-bold text-indigo-300 flex items-center justify-center gap-1.5">
           <span>📲</span> このページをご家族や同僚にシェア
         </p>
         
-        <div class="flex justify-center p-3 bg-slate-100 rounded-xl w-36 h-36 mx-auto shadow-md">
-          <div id="qrcode" class="w-full h-full flex items-center justify-center"></div>
+        <div class="flex justify-center p-2.5 bg-white rounded-xl w-36 h-36 mx-auto shadow-md overflow-hidden">
+          <img id="qr-image" 
+               src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fmatsuodentalassociation.github.io%2Fsleep-careguide%2F" 
+               alt="QRコード" 
+               class="w-full h-full object-contain" />
         </div>
         
         <p class="text-[11px] text-slate-400">
@@ -358,11 +352,11 @@
         </button>
       </div>
 
-      <!-- クレジット＆テロップ領域（MDA製作・水元医院Dr平瀬悦子監修 英語表記） -->
-      <div class="text-[10px] text-slate-500 pt-3 border-t border-slate-900 space-y-1 leading-relaxed">
-        <p>出典：厚生労働省「健康づくりのための睡眠ガイド2023」「国民健康・栄養調査」・日本睡眠学会知見に基づく</p>
-        <p class="tracking-wider text-slate-500">
-          Produced by <span class="font-semibold text-slate-400">MDA</span> &nbsp;|&nbsp; Supervised by <span class="font-semibold text-slate-400">Dr. Etsuko Hirase</span> (Mizumoto Clinic)
+      <!-- クレジット＆テロップ領域（最下段フォントサイズ text-[9px] & text-slate-600 に統一） -->
+      <div class="pt-3 border-t border-slate-900 space-y-1 text-center">
+        <p class="text-[9px] text-slate-600">出典：厚生労働省「健康づくりのための睡眠ガイド2023」「国民健康・栄養調査」・日本睡眠学会知見に基づく</p>
+        <p class="text-[9px] text-slate-600 tracking-wider">
+          Produced by MDA &nbsp;|&nbsp; Supervised by Dr. Etsuko Hirase (Mizumoto Clinic)
         </p>
         <p class="text-[9px] text-slate-600">© 2026 Comprehensive Sleep Knowledge Project</p>
       </div>
@@ -372,7 +366,6 @@
 
   <!-- 動作スクリプト -->
   <script>
-    // 1. スムーズスクロール＆ハイライト
     function scrollToCard(cardId) {
       const el = document.getElementById(cardId);
       if (el) {
@@ -383,8 +376,8 @@
       }
     }
 
-    // 2. ミニ比較グラフ初期化 (Chart.js / 低刺激パレット適用)
     window.addEventListener('DOMContentLoaded', () => {
+      // グラフ初期化
       const ctx = document.getElementById('miniAgeChart').getContext('2d');
       new Chart(ctx, {
         type: 'bar',
@@ -446,22 +439,15 @@
         }
       });
 
-      // 3. QRコード自動生成
-      try {
-        const currentUrl = window.location.href;
-        const qr = qrcode(0, 'M');
-        qr.addData(currentUrl);
-        qr.make();
-        document.getElementById('qrcode').innerHTML = qr.createSvgTag({
-          scalable: true,
-          margin: 0
-        });
-      } catch (e) {
-        document.getElementById('qrcode').innerHTML = '<span class="text-slate-800 text-[10px] font-bold text-center">QR生成完了<br>(Web公開時に自動表示)</span>';
+      // ページURLに応じたQRコード画像の動的セット
+      const currentUrl = window.location.href;
+      if (currentUrl && currentUrl.startsWith('http')) {
+        const qrImg = document.getElementById('qr-image');
+        qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' + encodeURIComponent(currentUrl);
       }
     });
 
-    // 4. URLコピー機能
+    // URLコピー機能
     function copyCurrentUrl(btn) {
       const url = window.location.href;
       navigator.clipboard.writeText(url).then(() => {
@@ -481,3 +467,4 @@
 
 </body>
 </html>
+
